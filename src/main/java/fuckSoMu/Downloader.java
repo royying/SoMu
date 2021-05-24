@@ -26,6 +26,7 @@ public class Downloader {
 
     public static void main(String[] args){
 
+        Unirest.config().verifySsl(false);
         if (args.length>0){
             Path p ;
             try {
@@ -75,7 +76,7 @@ public class Downloader {
         String HLS1080 = videoObject.get("hlsPath").getAsString().replace("HLS","HLS_1080");
         String mediaRoot = videoObject.get("hlsPath").getAsString().replace("HLS.m3u8","");
         System.out.println(videoObject);
-//        System.out.println(HLS1080);
+        System.out.println(HLS1080);
 
         JsonArray subArr = videoObject.get("captionS3Paths").getAsJsonArray();
 //        System.out.println(subArr);
@@ -88,6 +89,11 @@ public class Downloader {
             HLS = Unirest.get(HLS1080.replace("HLS_1080","HLSFHD"))
                     .cookie(cookieList)
                     .asString();
+        }else if(HLS.getStatus()==403){
+            System.out.println("403 error on m3u8 list download!!!");
+            System.out.println(HLS.getBody());
+            cookieList.stream().forEach(e->System.out.println(e));
+            System.exit(1);
         }
 
         DownloadTS(HLS.getBody().split("\\n"),mediaRoot,title);
@@ -144,8 +150,20 @@ public class Downloader {
         new File(saveRoot+"temp").mkdirs();
         new File(saveRoot+mediaTitle).mkdirs();
         System.out.print("Downloading : ");
+
         for (String row :rows) {
-            System.out.println(row);
+            if(row.contains(".ts")){
+                System.out.print("_");
+            }else if(row.contains("#EXT-X-KEY")){
+                System.out.println(row);
+                System.exit(1);
+            }else if(row.contains("#EXT-X-ENDLIST")){
+                System.out.println();
+            }else if(row.contains("#EXT-X-")){
+                System.out.println(row);
+            }
+        }
+        for (String row :rows) {
             if(row.contains(".ts")){
                 System.out.print("|");
                 Unirest.get(mediaRoot+row)
@@ -191,7 +209,9 @@ public class Downloader {
 
         pb2.redirectErrorStream(true);
         pb2.command(ffmpeg,
-                "-i",quot+saveRoot+"temp"+File.separator+"all.ts"+quot,
+                "-y",
+                "-i",
+                quot+saveRoot+"temp"+File.separator+"all.ts"+quot,
                 "-acodec",
                 "copy",
                 "-vcodec",
@@ -204,15 +224,15 @@ public class Downloader {
             BufferedReader reader = new BufferedReader(new InputStreamReader(convert.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+//                System.out.println(line);
             }
-            int exitCode = 0;
-            try {
-                exitCode = convert.waitFor();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("\nExited with error code : " + exitCode);
+//            int exitCode = 0;
+//            try {
+//                exitCode = convert.waitFor();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println("\nExited with error code : " + exitCode);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -249,7 +269,7 @@ public class Downloader {
         }
 
         for (String elem:cookieArr) {
-            String[] tempArr =elem.split("=");
+            String[] tempArr =elem.split("=",2);
             cookieList.add(new Cookie(tempArr[0],tempArr[1]));
             if(tempArr[0].equals("we_access_token")){
                 we_access_token=tempArr[1];

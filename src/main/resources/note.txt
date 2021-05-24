@@ -1,0 +1,12 @@
+
+ffmpeg -headers "Cookie: we_agree_cookie=0; _ga=GA1.2.1967979254.1621825099; _gid=GA1.2.383665166.1621825099; we_lang=en-US; we_access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0IjoiMSIsImciOjE2NjA3NTIwODYxODkxNjYsImwiOiIyMDIxLTExLTIwVDAzOjUwOjA5LjE2NSswMDAwIn0.0wW_Cabd4Y8vNT1Kszp1BsWn0aChXwIe8BowW1WOCfY; we_user_key=79ebff66a3e545f6bee3d989b804fea5846; _gat_gtag_UA_141395814_4=1; CloudFront-Policy=eyJTdGF0ZW1lbnQiOiBbeyJSZXNvdXJjZSI6Imh0dHBzOi8vY2RuLW1lZGlhLndldmVyc2UuaW8vdmlkZW8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNjIzMzA4NzQ3fX19XX0_; CloudFront-Key-Pair-Id=APKAJ542X2ZZN7QDC6GA; CloudFront-Signature=gjUV0J5Jckbk0f1~3bCtgWVfjWL8MkW5ecxEHT8I7WM2jx7dZAZRU84HzU5SqnN65bij6dvMr-Zm~1H5sVWmhaJUCsguSA~h9xMEL7lieRFW8FZgrOZd6RIctW575VNdJimKq3m2zM0jeahyBUl6mqTmc4fDRyyf4v5t4AahsDR~VTJaDBh7QxYGx-VryYP0QKuDJxCA1OGswVND70jpaYw94njoeCcOARauG~1jRVgZsskFh9y7KSGtes8d-k9MaAKBjxU1Y4Cc-D3kO2tI1WRG1fQKk-~jCS9v-PzeGZsdBtn0aemUAO5xcgdVAwKhh5oJn-pHTGr0l91OYPbBAQ__; _dd_s=rum=1&id=6b39eb0f-4169-42ff-ad2f-422460da372b&created=1621837515122&expire=1621838419352" -i https://cdn-media.weverse.io/video1729/DASH.mpd -codec copy out.mp4
+
+
+
+https://forum.videohelp.com/threads/400863-Downloading-encrypted-mpd-video-files
+
+
+yt-dlp --allow-unplayable-formats --cookies D:\Source\fuckSoMu\weverse.io_cookies.txt "https://cdn-media.weverse.io/video235/DASH.mpd" --output D:\outVid.mp4
+
+
+Widevine
